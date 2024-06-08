@@ -9,6 +9,7 @@ from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import exceptions
 
 
 User = get_user_model()
@@ -33,10 +34,9 @@ class UserLogOutView(generics.GenericAPIView):
     API view for user logout.
     Allows users to log out and invalidate their JWT.
     """
-    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     def get(self, request):
-        request.user.auth_token.delete()
         logout(request)
         return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
 
@@ -59,6 +59,15 @@ class FriendRequestCreateView(generics.CreateAPIView):
     serializer_class = FriendRequestSerializer
     throttle_classes = [AnonRateThrottle, ScopedRateThrottle]
     throttle_scope = 'friend_requests'
+    permission_classes = [permissions.IsAuthenticated]
+    # handle to_user should not be same as from_user
+
+
+    def perform_create(self, serializer):
+        to_user = serializer.validated_data.get('to_user')
+        if to_user == self.request.user:
+            raise exceptions.ValidationError("Cannot send friend request to yourself.")
+        serializer.save(from_user=self.request.user)
 
 class FriendRequestAcceptView(generics.UpdateAPIView):
     """
@@ -89,14 +98,16 @@ class FriendListView(generics.ListAPIView):
     API view for retrieving a user's friends list.
     Allows authenticated users to retrieve a list of their friends.
     """
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = FriendRequestSerializer
 
     def get_queryset(self):          
         if self.request.user.is_authenticated:
             accepted_requests = FriendRequest.objects.filter(to_user=self.request.user, accepted=True)
-            return accepted_requests
+            if accepted_requests.exists():
+                return accepted_requests
+            else:
+                raise exceptions.NotFound("You have no friends.")
         else:
             return FriendRequest.objects.none()
 
@@ -114,5 +125,8 @@ class PendingFriendRequestListView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        if queryset.exists():
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
+        else:
+            return Response({"detail": "No pending friend requests."})

@@ -1,6 +1,10 @@
 from django.contrib import admin
 from django.urls import path
 from users import views
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,4 +17,6 @@ urlpatterns = [
     path('friend-requests/<int:pk>/reject/', views.FriendRequestRejectView.as_view(), name='friend_request_reject'),
     path('friends/', views.FriendListView.as_view(), name='friend_list'),
     path('friend-requests/pending/', views.PendingFriendRequestListView.as_view(), name='pending_friend_request_list'),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
