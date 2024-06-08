@@ -1,0 +1,967 @@
+{
+	"info": {
+		"_postman_id": "dd8cbbd9-7782-499e-bcd9-0288b7e10b9c",
+		"name": "Django| Social Network",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35965275"
+	},
+	"item": [
+		{
+			"name": "SignUp",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 401\", function () {",
+							"  pm.expect(pm.response.code).to.equal(401);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - detail, code, and messages\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('detail');",
+							"    pm.expect(responseData).to.have.property('code');",
+							"    pm.expect(responseData).to.have.property('messages');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Messages array should have the correct structure\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.messages).to.be.an('array');",
+							"    responseData.messages.forEach(function(message) {",
+							"        pm.expect(message).to.be.an('object');",
+							"        pm.expect(message.token_class).to.exist.and.to.be.a('string');",
+							"        pm.expect(message.token_type).to.exist.and.to.be.a('string');",
+							"        pm.expect(message.message).to.exist.and.to.be.a('string');",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Token type is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.token_type).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Token type should not be empty\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"email\": \"johncena@gmail.com\",\r\n    \"name\": \"John Cena\",\r\n    \"password\": \"password\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/signup/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"signup",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AllUsers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 401\", function () {",
+							"  pm.expect(pm.response.code).to.equal(401);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - detail, code, and messages\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('detail');",
+							"    pm.expect(responseData).to.have.property('code');",
+							"    pm.expect(responseData).to.have.property('messages');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Messages array is present and contains expected number of elements\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.messages).to.exist.and.to.be.an('array');",
+							"    pm.expect(responseData.messages).to.have.lengthOf.at.least(1);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Token_class, token_type, and message are non-empty strings\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.messages).to.be.an('array');",
+							"    ",
+							"    responseData.messages.forEach(function(message) {",
+							"        pm.expect(message.token_class).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"        pm.expect(message.token_type).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"        pm.expect(message.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"john\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/users/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LogIn",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - refresh and access\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('refresh');",
+							"    pm.expect(responseData).to.have.property('access');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Refresh token is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData.refresh).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Refresh token should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Access token is a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.access).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Access token should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"johncena@gmail.com\",\r\n    \"password\" : \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/login/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"login",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FriendsList",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 401\", function () {",
+							"    pm.expect(pm.response.code).to.equal(401);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - detail, code, and messages\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.detail).to.exist;",
+							"    pm.expect(responseData.code).to.exist;",
+							"    pm.expect(responseData.messages).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Messages array is present and has expected number of elements\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.messages).to.exist.and.to.be.an('array');",
+							"  pm.expect(responseData.messages).to.have.lengthOf(1);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Token class, token type, and message in messages array are non-empty strings\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.messages).to.be.an('array');",
+							"    ",
+							"    responseData.messages.forEach(function (message) {",
+							"        pm.expect(message.token_class).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Token class should not be empty\");",
+							"        pm.expect(message.token_type).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Token type should not be empty\");",
+							"        pm.expect(message.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Message should not be empty\");",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3ODU4MDEyLCJpYXQiOjE3MTc4NTc3MTIsImp0aSI6IjI2OGRkOGU2MDQ4NDRlYzViNGUyZDZkOGJlMWVjZjEzIiwidXNlcl9pZCI6MTN9.s_RZNNNAMUn3RXbrjNA_uGdRiSu-bYLNro00WoGt9zk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/friends/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"friends",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "friend-requests",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 401\", function () {",
+							"  pm.expect(pm.response.code).to.equal(401);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - detail, code, and messages\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.detail).to.exist;",
+							"    pm.expect(responseData.code).to.exist;",
+							"    pm.expect(responseData.messages).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Token class, token type, and message format in messages array\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.messages).to.be.an('array').that.is.not.empty;",
+							"",
+							"    responseData.messages.forEach(function(message) {",
+							"        pm.expect(message).to.have.property('token_class').that.is.a('string');",
+							"        pm.expect(message).to.have.property('token_type').that.is.a('string');",
+							"        pm.expect(message).to.have.property('message').that.is.a('string');",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Verify the request URL is correct\", function () {",
+							"    pm.expect(pm.request.url).to.equal(\"http://127.0.0.1:8000/friend-requests/\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3ODQ4NzcxLCJpYXQiOjE3MTc4NDg0NzEsImp0aSI6ImFjYWExOTc1ZjUxYTQ0MGZiZmMwZDIyYzkzZWZhM2Q0IiwidXNlcl9pZCI6MTN9.d_3xPzqg-bZoCsvwUQHl_xHZSDCWkI0ORoXz1hOivAU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"from_user\" : 13,\r\n    \"to_user\" : 2,\r\n    \"accepted\" : true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/friend-requests/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"friend-requests",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SearchUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 401\", function () {",
+							"  pm.expect(pm.response.code).to.equal(401);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - detail, code, and messages\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.detail).to.exist;",
+							"    pm.expect(responseData.code).to.exist;",
+							"    pm.expect(responseData.messages).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Messages array should have the correct structure\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.messages).to.be.an('array');",
+							"  responseData.messages.forEach(function(message) {",
+							"    pm.expect(message).to.be.an('object');",
+							"    pm.expect(message.token_class).to.be.a('string');",
+							"    pm.expect(message.token_type).to.be.a('string');",
+							"    pm.expect(message.message).to.be.a('string');",
+							"  });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Verify that the 'search' parameter is included in the request URL\", function () {",
+							"    const requestUrl = pm.request.url.toString();",
+							"    ",
+							"    pm.expect(requestUrl).to.include(\"search=john\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3ODQ4NzcxLCJpYXQiOjE3MTc4NDg0NzEsImp0aSI6ImFjYWExOTc1ZjUxYTQ0MGZiZmMwZDIyYzkzZWZhM2Q0IiwidXNlcl9pZCI6MTN9.d_3xPzqg-bZoCsvwUQHl_xHZSDCWkI0ORoXz1hOivAU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/users/?search=john",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						""
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "john"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a friend request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 401\", function () {",
+							"  pm.expect(pm.response.code).to.equal(401);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.detail).to.exist;",
+							"    pm.expect(responseData.code).to.exist;",
+							"    pm.expect(responseData.messages).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Messages array is present and contains expected number of elements\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.messages).to.be.an('array');",
+							"  pm.expect(responseData.messages).to.have.lengthOf.at.least(1, \"Messages array should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Token class, token type, and message in messages array are non-empty strings\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.messages).to.be.an('array');",
+							"    ",
+							"    responseData.messages.forEach(function (message) {",
+							"        pm.expect(message.token_class).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Token class should not be empty\");",
+							"        pm.expect(message.token_type).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Token type should not be empty\");",
+							"        pm.expect(message.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Message should not be empty\");",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content type is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3ODU4MjgxLCJpYXQiOjE3MTc4NTc5ODEsImp0aSI6IjlkYTc4YTkyOGZlNDRiMzE4N2Q0ODkyNGY0YmFjYzQ4IiwidXNlcl9pZCI6MTN9.LsKYeXH8zuB06vLuJmtGmceJh4ZzarHg6LeXpXLyRu0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"from_user\": 2,\r\n    \"to_user\" : 13\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/friend-requests/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"friend-requests",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Friend Request Accept View",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 401\", function () {",
+							"  pm.expect(pm.response.code).to.equal(401);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - detail, code, and messages\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.detail).to.exist;",
+							"    pm.expect(responseData.code).to.exist;",
+							"    pm.expect(responseData.messages).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Token class and token type are not empty\", function () {",
+							"  const responseData = pm.response.json();",
+							"",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.messages).to.be.an('array');",
+							"  ",
+							"  responseData.messages.forEach(function(message) {",
+							"    pm.expect(message.token_class).to.exist.and.to.not.be.empty;",
+							"    pm.expect(message.token_type).to.exist.and.to.not.be.empty;",
+							"  });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Verify the correct URL and endpoint for the request\", function () {",
+							"    pm.expect(pm.request.url).to.equal(\"http://127.0.0.1:8000/friend-requests/23/accept/\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3ODU4MDEyLCJpYXQiOjE3MTc4NTc3MTIsImp0aSI6IjI2OGRkOGU2MDQ4NDRlYzViNGUyZDZkOGJlMWVjZjEzIiwidXNlcl9pZCI6MTN9.s_RZNNNAMUn3RXbrjNA_uGdRiSu-bYLNro00WoGt9zk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/friend-requests/23/accept/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"friend-requests",
+						"23",
+						"accept",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pending Friend Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 401\", function () {",
+							"    pm.expect(pm.response.code).to.equal(401);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.detail).to.exist;",
+							"    pm.expect(responseData.code).to.exist;",
+							"    pm.expect(responseData.messages).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Token class and token type are present in the messages array\", function () {",
+							"  const responseData = pm.response.json();",
+							"",
+							"  pm.expect(responseData.messages).to.be.an('array');",
+							"  responseData.messages.forEach(function(message) {",
+							"    pm.expect(message.token_class).to.exist;",
+							"    pm.expect(message.token_type).to.exist;",
+							"  });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content type is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response message is not empty\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.messages[0].message).to.not.be.empty;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3ODU4MDEyLCJpYXQiOjE3MTc4NTc3MTIsImp0aSI6IjI2OGRkOGU2MDQ4NDRlYzViNGUyZDZkOGJlMWVjZjEzIiwidXNlcl9pZCI6MTN9.s_RZNNNAMUn3RXbrjNA_uGdRiSu-bYLNro00WoGt9zk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/friend-requests/pending/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"friend-requests",
+						"pending",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reject Friend Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 401\", function () {",
+							"  pm.expect(pm.response.code).to.equal(401);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData).to.have.property('detail');",
+							"  pm.expect(responseData).to.have.property('code');",
+							"  pm.expect(responseData).to.have.property('messages');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Token type is not empty\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.messages).to.be.an('array');",
+							"    responseData.messages.forEach(function(message) {",
+							"        pm.expect(message.token_type).to.exist.and.to.not.be.empty;",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Messages array is present and contains the expected number of elements\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.messages).to.exist.and.to.be.an('array');",
+							"    pm.expect(responseData.messages).to.have.lengthOf(1);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Token class is in a valid format\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.messages).to.be.an('array');",
+							"    responseData.messages.forEach(function(message) {",
+							"        pm.expect(message.token_class).to.match(/[A-Za-z0-9]+/);",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3ODU4MDEyLCJpYXQiOjE3MTc4NTc3MTIsImp0aSI6IjI2OGRkOGU2MDQ4NDRlYzViNGUyZDZkOGJlMWVjZjEzIiwidXNlcl9pZCI6MTN9.s_RZNNNAMUn3RXbrjNA_uGdRiSu-bYLNro00WoGt9zk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/friend-requests/22/reject/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"friend-requests",
+						"22",
+						"reject",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LogOut",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required Content-Type header\", function () {",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Message is a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Message should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Message field is present in the response\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.message).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Message is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Message should not be empty\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3ODQ4NzcxLCJpYXQiOjE3MTc4NDg0NzEsImp0aSI6ImFjYWExOTc1ZjUxYTQ0MGZiZmMwZDIyYzkzZWZhM2Q0IiwidXNlcl9pZCI6MTN9.d_3xPzqg-bZoCsvwUQHl_xHZSDCWkI0ORoXz1hOivAU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/logout/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"logout",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3NDkxNDE1LCJpYXQiOjE3MTc0OTExMTUsImp0aSI6IjE2YTY3ZTQ5MDgxMTQ0YjhiOTcyMjg3MjdhMjU5ZWU5IiwidXNlcl9pZCI6Mn0.9Zk-Pce4O_pv2v2axYxlHj_D-S6eM28Uz5VLuF340z8",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
